@@ -30,6 +30,10 @@ async function run() {
     const servicesCollection = client.db('eventsDB').collection('services');
 
     //services related api
+    app.get('/services', async(req,res)=>{
+      const result = await servicesCollection.find().toArray();
+      res.send(result); 
+    })
     app.post('/services', async(req,res)=>{
       const service = req.body;
       const result = await servicesCollection.insertOne(service);
