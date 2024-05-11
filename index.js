@@ -28,6 +28,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const servicesCollection = client.db('eventsDB').collection('services');
+    const bookingsCollection = client.db('eventsDB').collection('bookings');
 
     //services related api
     app.get('/services', async(req,res)=>{
@@ -35,7 +36,6 @@ async function run() {
       res.send(result); 
     })
 
-    
     app.get('/services/:id', async(req,res)=>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
@@ -43,13 +43,21 @@ async function run() {
       res.send(result); 
     })
 
-
     app.post('/services', async(req,res)=>{
       const service = req.body;
       const result = await servicesCollection.insertOne(service);
       res.send(result); 
     })
     
+
+    //Booking related api
+    app.post('/bookings', async(req,res)=>{
+      const booking = req.body;
+      const result = await bookingsCollection.insertOne(booking);
+      res.send(result); 
+    })
+
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
