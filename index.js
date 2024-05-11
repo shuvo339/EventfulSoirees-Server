@@ -61,6 +61,23 @@ async function run() {
       res.send(result); 
     })
     
+    app.put('/services/:id', async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const newService = req.body;
+      const options = { upsert: true };
+      const updateService = {
+        $set: {
+          serviceName: newService.serviceName,
+          serviceArea: newService.serviceArea,
+          imgURL: newService.imgURL,
+          price: newService.price,
+          description: newService.description
+        },
+      };
+      const result = await servicesCollection.updateOne(filter, updateService, options);
+      res.send(result); 
+    })
 
     //Booking related api
     app.post('/bookings', async(req,res)=>{
