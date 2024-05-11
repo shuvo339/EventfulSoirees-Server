@@ -5,9 +5,15 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: ["http://localhost:5173"]
-}))
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://eventful-soirees.web.app"
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 
@@ -76,6 +82,17 @@ async function run() {
         },
       };
       const result = await servicesCollection.updateOne(filter, updateService, options);
+      res.send(result); 
+    })
+
+    //pagination and search services api
+    app.get('/all-services', async(req,res)=>{
+      const search = req.query.search;
+      let query = {
+        serviceName: { $regex: search, $options: 'i' },
+      }
+      console.log(search)
+      const result = await servicesCollection.find(query).toArray();
       res.send(result); 
     })
 
