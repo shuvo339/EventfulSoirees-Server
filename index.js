@@ -32,7 +32,12 @@ async function run() {
 
     //services related api
     app.get('/services', async(req,res)=>{
-      const result = await servicesCollection.find().toArray();
+      const email = req.query.email;
+      let query = {};
+      if(email){
+        query = {providerEmail: email}
+      }
+      const result = await servicesCollection.find(query).toArray();
       res.send(result); 
     })
 
