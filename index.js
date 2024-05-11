@@ -92,6 +92,23 @@ async function run() {
       const result = await bookingsCollection.find(query).toArray();
       res.send(result); 
     })
+    app.get('/booked', async(req,res)=>{
+      const email = req.query.email;
+       const query = {providerEmail: email}
+      const result = await bookingsCollection.find(query).toArray();
+      res.send(result); 
+    })
+
+    app.patch('/bookings/:id', async (req, res) => {
+      const id = req.params.id
+      const status = req.body
+      const query = { _id: new ObjectId(id) }
+      const updateDoc = {
+        $set: status,
+      }
+      const result = await bookingsCollection.updateOne(query, updateDoc)
+      res.send(result)
+    })
 
 
     // Send a ping to confirm a successful connection
