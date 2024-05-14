@@ -11,6 +11,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://eventful-soirees.web.app",
       "https://eventful-soirees.web.app"
     ],
     credentials: true,
