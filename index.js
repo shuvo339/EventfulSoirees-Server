@@ -134,14 +134,32 @@ async function run() {
     })
 
     //pagination and search services api
-    app.get('/all-services', async(req,res)=>{
-      const search = req.query.search;
-      let query = {
-        serviceName: { $regex: search, $options: 'i' },
-      }
-      const result = await servicesCollection.find(query).toArray();
-      res.send(result); 
-    })
+   app.get('/all-services', async(req,res)=>{
+    const search = req.query.search;
+    const page = parseInt(req.query.page);
+    let newpage=0;
+    if(page===0){
+     newpage = page;
+    }else{
+     newpage=page-1;
+    }
+    const size = parseInt(req.query.size);
+ 
+    let query = {
+      serviceName: { $regex: search, $options: 'i' },
+    }
+     const result = await servicesCollection.find(query)
+    .skip(newpage*size)
+    .limit(size)
+    .toArray();
+    res.send(result)
+  })
+
+  app.get('/servicecount', async (req, res) => {
+    const count = await servicesCollection.countDocuments();
+    res.send({count})
+  })
+
 
     //Booking related api
     app.post('/bookings', logger, verifyToken, async(req,res)=>{
