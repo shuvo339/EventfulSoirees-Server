@@ -156,7 +156,11 @@ async function run() {
   })
 
   app.get('/servicecount', async (req, res) => {
-    const count = await servicesCollection.countDocuments();
+    const search = req.query.search;
+    let query = {
+      serviceName: { $regex: search, $options: 'i' },
+    }
+    const count = await servicesCollection.countDocuments(query);
     res.send({count})
   })
 
