@@ -61,6 +61,7 @@ async function run() {
     // await client.connect();
     const servicesCollection = client.db('eventsDB').collection('services');
     const bookingsCollection = client.db('eventsDB').collection('bookings');
+    const reviewsCollection = client.db('eventsDB').collection('reviews');
 
     const cookieOptions = {
       httpOnly: true,
@@ -195,6 +196,17 @@ async function run() {
       }
       const result = await bookingsCollection.updateOne(query, updateDoc)
       res.send(result)
+    })
+
+    //review related api
+    app.post('/reviews', async(req,res)=>{
+      const review = req.body;
+      const result = await reviewsCollection.insertOne(review);
+      res.send(result); 
+    })
+    app.get('/reviews', async(req,res)=>{
+      const result = await reviewsCollection.find().toArray();
+      res.send(result); 
     })
 
 
